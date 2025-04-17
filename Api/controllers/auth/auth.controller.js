@@ -39,3 +39,18 @@ export const signin= async(req,res,next) =>{
     next(error)
   }
 }
+
+export const updatedProfilePic=async(req,res)=>{
+  try{
+    const userId=req.params.id;
+    const {profilePicture}=req.body;
+    const updatedUser=await User.findByIdAndUpdate(
+      userId,
+      {profilePicture},
+      {new:true}
+    )
+    res.status(203).json({profilePicture:updatedUser.profilePicture})
+  }catch(error){
+    next(error)
+  }
+}

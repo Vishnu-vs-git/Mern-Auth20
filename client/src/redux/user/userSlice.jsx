@@ -20,9 +20,19 @@ const userSlice= createSlice({
     signInFailure:(state,action)=>{
          state.loading=false;
          state.error = action.payload;
+    },
+    imageUpdate:(state,action)=>{
+      state.currentUser.profilePicture=action.payload
+    },
+    profileInfoUpdate:(state,action)=>{
+      state.currentUser.username=action.payload.username;
+      state.currentUser.email=action.payload.email
+    },
+    userLogout:(state,action)=>{
+      state.currentUser=null;
     }
   }
 
 })
-export const {signInstart,signInSuccess,signInFailure}=userSlice.actions;
+export const {signInstart,signInSuccess,signInFailure,imageUpdate,profileInfoUpdate,userLogout}=userSlice.actions;
 export default userSlice.reducer;

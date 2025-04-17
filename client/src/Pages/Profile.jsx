@@ -1,25 +1,128 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRef } from "react";
+import { uploadImageToClodinary } from "../utils/cloudinaryUpload";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { imageUpdate,profileInfoUpdate, userLogout} from "../redux/user/userSlice";
 
 const Profile = () => {
-  const {currentUser}=useSelector(state=> state.user)
-  console.log("current user is",currentUser)
-  return (
-    <div  className="p-3 max-w-lg mx-auto"   >
-      <h1 className= "text-3xl font-semibold text-center my-7">Profile</h1>
-      <form className="flex flex-col gap-4" >
-        <img className="w-23 h-23 rounded-full  object-cover mt-2 cursor-pointer  self-center " src={currentUser.profilePicture} alt="Profile-image"/>
-        <input defaultValue={currentUser.username}  type="text" id='username' placeholder='username' className='bg-slate-100 rounded-lg p-3 '/>
-        <input defaultValue={currentUser.email} type="email" id='email' placeholder='Email' className='bg-slate-100 rounded-lg p-3 '/>
-        <input type="password" id='password' placeholder='Password' className='bg-slate-100 rounded-lg p-3 '/>
-        <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95  disabled:opacity-80 " >Update</button>
-      </form>
-      <div className='flex justify-between mt-5'  >
-        <span className="text-red-700 cursor-pointer"> Delete Account</span>
-        <span className="text-red-700 cursor-pointer"> Sign out</span>
-      </div>
-    </div>
-  )
+  const fileRef = useRef(null);
+  const { currentUser } = useSelector((state) => state.user);
+  const [userName, setUserName] = useState(currentUser.username);
+  const [userEmail, setUserEmail] = useState(currentUser.email);
+
+  const dispatch = useDispatch();
+
+  console.log("current user is", currentUser);
+  const [imageUrl, setImageUrl] = useState(currentUser?.profilePicture || "");
+
+  const handleImageChange = async (e) => {
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+    const uploadedUrl = await uploadImageToClodinary(selectedFile);
+    if (uploadedUrl) {
+      setImageUrl(uploadedUrl);
+      console.log(uploadedUrl);
+
+      try {
+        console.log("helllllo");
+        const response = await axios.put(
+          `/api/auth/update-profile-pic/${currentUser._id}`,
+          {
+            profilePicture: uploadedUrl,
+          }
+        );
+        dispatch(imageUpdate(response.data?.profilePicture));
+
+        toast.success("Profile image updated successfully");
+      } catch (error) {
+        toast.error("Failed to update profile image");
+      }
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log("helloooooooo");
+      const response = await axios.put(
+        `/api/auth/update-profile-info/${currentUser._id}`,
+        {
+          username: userName,
+          email: userEmail,
+        }
+       
+      );
+      console.log("response isss",response)
+      dispatch(profileInfoUpdate({username:response.data.username,email:response.data.email}))
+      toast.success("Profile data updated successfully");
+      console.log("response is", response);
+    } catch (error) {
+      console.log("error");
+    }
+  };
+
+
+const handleLogout=()=>{
+  dispatch(userLogout())
+  persistor.purge(); // clear persisted user state
+
 }
 
-export default Profile
+  return (
+    <div className="p-3 max-w-lg mx-auto">
+      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          type="file"
+          ref={fileRef}
+          hidden
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        <img
+          className="w-23 h-23 rounded-full  object-cover mt-2 cursor-pointer  self-center "
+          src={currentUser.profilePicture}
+          alt="Profile-image"
+          onClick={() => fileRef.current.click()}
+        />
+        <input
+          // defaultValue={currentUser.username}
+          type="text"
+          id="username"
+          value={userName }
+          placeholder="username"
+          className="bg-slate-100 rounded-lg p-3 "
+          onChange={(e) => setUserName(e.target.value)}
+        />
+        <input
+          // defaultValue={currentUser.email}
+          type="email"
+          id="email"
+          placeholder="Email"
+          value={userEmail }
+          className="bg-slate-100 rounded-lg p-3 "
+          onChange={(e) => setUserEmail(e.target.value)}
+        />
+        {/* <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          className="bg-slate-100 rounded-lg p-3 "
+        /> */}
+        <button
+          type="submit"
+          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95  disabled:opacity-80 "
+        >
+          Update
+        </button>
+      </form>
+      <div className="flex justify-between mt-5">
+        <span className="text-red-700 cursor-pointer"> Delete Account</span>
+        <span onClick={handleLogout} className="text-red-700 cursor-pointer"> Sign out</span>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;

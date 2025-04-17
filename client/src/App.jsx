@@ -7,6 +7,8 @@ import SignUp from "./Pages/SignUp";
 import Profile from "./Pages/Profile";
 import Header from "./components/Header";
 import { PrivateRoute } from "./components/privateRoute";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const App = () => {
   return (
@@ -21,6 +23,7 @@ const App = () => {
              <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
     </BrowserRouter>
   );
 };

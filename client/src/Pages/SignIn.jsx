@@ -12,13 +12,19 @@ const SignIn = () => {
   const navigate=useNavigate()
   const dispatch=useDispatch();
   const handleChange = (e) => {
+
     setFormData({ ...formData, [e.target.id]: e.target.value });
+
+
+
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       // setErrorMessage("")
-      dispatch(signInstart())
+
+      dispatch(signInstart())  
+
       const res = await fetch('/api/auth/signin', {
         method: "POST",
         headers: {

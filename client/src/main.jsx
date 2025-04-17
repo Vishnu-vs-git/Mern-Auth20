@@ -5,6 +5,8 @@ import App from './App.jsx'
 import { persistor, Store } from './redux/Store.jsx'
 import {Provider} from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
+// import 'react-toastify/dist/ReactToastify.css';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
