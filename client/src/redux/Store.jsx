@@ -3,8 +3,12 @@ import userReducer from './user/userSlice'
 import {persistReducer} from 'redux-persist'
 import storage from "redux-persist/lib/storage"
 import persistStore from "redux-persist/es/persistStore"
+import adminReducer from "./admin/adminSlice"
 
-const rootreducer=combineReducers({user:userReducer
+
+const rootreducer=combineReducers({user:userReducer,
+admin:adminReducer,
+
 
 })
 

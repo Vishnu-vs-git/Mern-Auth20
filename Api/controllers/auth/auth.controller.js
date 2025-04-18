@@ -9,6 +9,9 @@ export const signup = async (req, res, next) => {
   console.log(req.body);
   try {
     const { username, email, password } = req.body;
+     const existingUser = await User.findOne({ email });
+        if (existingUser)
+          return res.status(400).json({ success:false,message: "User already exists" });
     const hashedPassword = bcryptjs.hashSync(password, 10);
   
     const newUser = new User({ username, email, password: hashedPassword });
@@ -25,8 +28,11 @@ export const signup = async (req, res, next) => {
 
 export const signin= async(req,res,next) =>{
   try{
+    console.log("admin from hello")
     const{email,password}=req.body;
+    console.log("Email,pass word is",email,password)
     const validUser=await User.findOne({email});
+    console.log("valid user is",validUser)
     if(!validUser) return next(errorHandler(404,'User not found'));
     const validPassword= bcryptjs.compareSync(password,validUser.password);
     if(!validPassword) return next(errorHandler(401,'wrong credentials'));

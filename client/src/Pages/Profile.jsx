@@ -4,7 +4,11 @@ import { useRef } from "react";
 import { uploadImageToClodinary } from "../utils/cloudinaryUpload";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { imageUpdate,profileInfoUpdate, userLogout} from "../redux/user/userSlice";
+import {
+  imageUpdate,
+  profileInfoUpdate,
+  userLogout,
+} from "../redux/user/userSlice";
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -41,8 +45,35 @@ const Profile = () => {
       }
     }
   };
+
+  const validateForm = () => {
+    //======================================================> Validate username
+    const usernameRegex = /^[A-Z][a-zA-Z]{0,14}$/; // Starts with a letter, only letters
+    if (
+      !userName ||
+      !usernameRegex.test(userName) ||
+      userName.length > 15 ||
+      userName.length <= 2
+    ) {
+      toast.error(
+        "Username must be between 3 and 15 characters, only letters, and must not start with a number."
+      );
+      return false;
+    }
+
+    // ====================================================>Validate email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!userEmail || !emailRegex.test(userEmail)) {
+      toast.error("Please enter a valid email.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     try {
       console.log("helloooooooo");
       const response = await axios.put(
@@ -51,10 +82,14 @@ const Profile = () => {
           username: userName,
           email: userEmail,
         }
-       
       );
-      console.log("response isss",response)
-      dispatch(profileInfoUpdate({username:response.data.username,email:response.data.email}))
+      console.log("response isss", response);
+      dispatch(
+        profileInfoUpdate({
+          username: response.data.username,
+          email: response.data.email,
+        })
+      );
       toast.success("Profile data updated successfully");
       console.log("response is", response);
     } catch (error) {
@@ -62,12 +97,11 @@ const Profile = () => {
     }
   };
 
-
-const handleLogout=()=>{
-  dispatch(userLogout())
-  persistor.purge(); // clear persisted user state
-
-}
+  const handleLogout = () => {
+    dispatch(userLogout());
+    toast.success("User loggedOut successfully");
+    persistor.purge(); //===================================================> clear persisted user state
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -90,7 +124,7 @@ const handleLogout=()=>{
           // defaultValue={currentUser.username}
           type="text"
           id="username"
-          value={userName }
+          value={userName}
           placeholder="username"
           className="bg-slate-100 rounded-lg p-3 "
           onChange={(e) => setUserName(e.target.value)}
@@ -100,16 +134,11 @@ const handleLogout=()=>{
           type="email"
           id="email"
           placeholder="Email"
-          value={userEmail }
+          value={userEmail}
           className="bg-slate-100 rounded-lg p-3 "
           onChange={(e) => setUserEmail(e.target.value)}
         />
-        {/* <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          className="bg-slate-100 rounded-lg p-3 "
-        /> */}
+
         <button
           type="submit"
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95  disabled:opacity-80 "
@@ -119,7 +148,10 @@ const handleLogout=()=>{
       </form>
       <div className="flex justify-between mt-5">
         <span className="text-red-700 cursor-pointer"> Delete Account</span>
-        <span onClick={handleLogout} className="text-red-700 cursor-pointer"> Sign out</span>
+        <span onClick={handleLogout} className="text-red-700 cursor-pointer">
+          {" "}
+          Sign out
+        </span>
       </div>
     </div>
   );
