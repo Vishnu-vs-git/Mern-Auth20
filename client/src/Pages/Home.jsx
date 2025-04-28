@@ -1,6 +1,6 @@
-import React from 'react'
-
-
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -8,6 +8,21 @@ import React from 'react'
 
 
 const Home = () => {
+  const navigate=useNavigate()
+  const currentUser= useSelector((state)=>{
+    return state.user.currentUser
+  })
+
+  useEffect(()=>{
+  if(currentUser==null){
+      navigate("/sign-up")
+  }else{
+    navigate("/")
+  }
+
+
+  }, [currentUser, navigate])
+  
 
 
   return (

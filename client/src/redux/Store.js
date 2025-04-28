@@ -10,6 +10,7 @@ const rootreducer=combineReducers({user:userReducer,
 admin:adminReducer,
 
 
+
 })
 
 const persistConfig={

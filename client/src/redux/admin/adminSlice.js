@@ -4,6 +4,7 @@ const initialState = {
   currentAdmin: null,
   isLoading: false,
   error: null,
+  
 };
 
 const adminSlice = createSlice({

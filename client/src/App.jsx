@@ -15,8 +15,6 @@ import AdminDashboard from "./admin/pages/AdminDashboard";
 import AdminAddUser from "./admin/pages/AdminAddUser";
 import AdminProtectedRoute from "./admin/components/AdminProtectedRoute";
 
-
-
 const AppContent = () => {
   const location = useLocation();
 
@@ -27,41 +25,48 @@ const AppContent = () => {
 
       <Routes>
         {/* User routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/" element={<Home />} />
         </Route>
 
         {/* Admin routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
-       
-       
-       
+
         {/* Protected Admin routes */}
-        <Route
-  path="/admin/dashboard"
-  element={
-    <AdminProtectedRoute>
-      <AdminDashboard />
-    </AdminProtectedRoute>
-  }
-/>
-
-<Route
-  path="/admin/add-user"
-  element={
-    <AdminProtectedRoute>
-      <AdminAddUser />
-    </AdminProtectedRoute>
-  }
-/>
+        {/* <Route
+          // path="/admin/dashboard"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboard 
+            </AdminProtectedRoute>
+          }
+        /> */}
 
 
 
-       
+        {/* <Route
+          path="/admin/add-user"
+          element={
+            <AdminProtectedRoute>
+              <AdminAddUser />
+            </AdminProtectedRoute>
+          }
+        /> */}
+
+        <Route element={<AdminProtectedRoute/>}>
+ 
+          <Route path="/admin/dashboard" element={<AdminDashboard/>} />    
+          <Route path="/admin/add-user" element={ <AdminAddUser />} />    
+
+         </Route>
+
+
+
+
 
 
       </Routes>

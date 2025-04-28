@@ -5,6 +5,7 @@ import { adminLogout } from "../../redux/admin/adminSlice";
 import Cookies from "js-cookie";
   import axios from "axios";
 import { toast } from "react-toastify";
+import { persistor } from "../../redux/Store";
 
 const AdminHeader = () => {
   const { currentAdmin } = useSelector((state) => state.admin);
@@ -14,6 +15,7 @@ const AdminHeader = () => {
   const handleLogout = async () => {
     await axios.get("/api/admin/logout", { withCredentials: true });
     dispatch(adminLogout());
+    persistor.purge()
     toast.success("Admin loggedout successfully")
     navigate("/admin/login");
   };

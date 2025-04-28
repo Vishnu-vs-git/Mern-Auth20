@@ -1,6 +1,6 @@
-import React,{useState}from "react"
+import React,{useEffect, useState}from "react"
 import axios from "axios"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { adminLoginSuccess } from "../../redux/admin/adminSlice";
 import { toast } from "react-toastify";
@@ -13,9 +13,19 @@ const dispatch=useDispatch();
 const navigate=useNavigate();
 
 
+const currentAdmin= useSelector((state=>state.admin.currentAdmin))
+
+  
+
+useEffect(()=>{
+   if(currentAdmin){
+    navigate("/admin/dashboard")
+  }
+})
 
 
 const handleLogin =async(e)=>{
+  
   e.preventDefault()
 
   try{
@@ -24,7 +34,7 @@ const handleLogin =async(e)=>{
     toast.success("Admin logged in successfully");
     navigate("/admin/dashboard",{ replace: true });
   }catch(error){
-     toast.error("Invalid admin Credentials")
+     toast.error("Invalid admin Credentials",error)
   }
 }
 

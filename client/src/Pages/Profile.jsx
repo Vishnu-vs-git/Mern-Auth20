@@ -9,6 +9,7 @@ import {
   profileInfoUpdate,
   userLogout,
 } from "../redux/user/userSlice";
+import { persistor } from "../redux/Store";
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -93,7 +94,7 @@ const Profile = () => {
       toast.success("Profile data updated successfully");
       console.log("response is", response);
     } catch (error) {
-      console.log("error");
+      console.log("error",error);
     }
   };
 
@@ -116,7 +117,7 @@ const Profile = () => {
         />
         <img
           className="w-23 h-23 rounded-full  object-cover mt-2 cursor-pointer  self-center "
-          src={currentUser.profilePicture}
+          src={imageUrl}
           alt="Profile-image"
           onClick={() => fileRef.current.click()}
         />

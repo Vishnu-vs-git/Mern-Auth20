@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,11 +8,24 @@ import {
 } from "../redux/user/userSlice";
 import { toast } from "react-toastify";
 
+
 const SignIn = () => {
   const [formData, setFormData] = useState({});
   const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentUser= useSelector((state)=>{
+    return state.user.currentUser
+  })
+  console.log(currentUser)
+
+    useEffect(()=>{
+      if(currentUser){
+        navigate("/")
+      }else{
+        navigate("/sign-in")
+      }
+    },[currentUser])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
