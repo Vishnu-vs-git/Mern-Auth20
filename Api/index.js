@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 
 
 
+
 mongoose
   .connect(process.env.MONGO)
   .then(() => {
@@ -24,6 +25,7 @@ app.listen(3000, () => {
   console.log("Server listening on port 3000 ");
 });
 app.use(cookieParser());
+
 app.use("/api/user",userRoutes);
 app.use("/api/auth",authRoutes);
 app.use("/api/admin",adminRoutes);

@@ -27,8 +27,9 @@ const handleSubmit= async(e)=>{
     })
     toast.success("user added successfully")
     navigate("/admin/dashboard")
-  }catch(err){
+  }catch(error){
     toast.error("failed to create user")
+    console.log(error)
   }
 }
 

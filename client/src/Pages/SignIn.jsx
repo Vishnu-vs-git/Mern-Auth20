@@ -21,7 +21,7 @@ const SignIn = () => {
 
     useEffect(()=>{
       if(currentUser){
-        navigate("/")
+        navigate("/home")
       }else{
         navigate("/sign-in")
       }
@@ -72,10 +72,11 @@ const SignIn = () => {
         return;
       }
       dispatch(signInSuccess(data));
-      toast.success("User signed up successfully");
+      toast.success("User signed in successfully");
       navigate("/");
     } catch (error) {
       dispatch(signInFailure());
+      toast.error(error.message)
     }
   };
 

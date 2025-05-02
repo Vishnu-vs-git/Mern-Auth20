@@ -17,7 +17,7 @@ const userSlice= createSlice({
          state.loading=false;
         
     },
-    signInFailure:(state,action)=>{
+    signInFailure:(state)=>{
          state.loading=false;
         
     },
@@ -28,7 +28,7 @@ const userSlice= createSlice({
       state.currentUser.username=action.payload.username;
       state.currentUser.email=action.payload.email
     },
-    userLogout:(state,action)=>{
+    userLogout:(state)=>{
       state.currentUser=null;
     }
   }

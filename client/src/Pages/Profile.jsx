@@ -10,6 +10,7 @@ import {
   userLogout,
 } from "../redux/user/userSlice";
 import { persistor } from "../redux/Store";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -18,6 +19,7 @@ const Profile = () => {
   const [userEmail, setUserEmail] = useState(currentUser.email);
 
   const dispatch = useDispatch();
+  const navigate=useNavigate()
 
   console.log("current user is", currentUser);
   const [imageUrl, setImageUrl] = useState(currentUser?.profilePicture || "");
@@ -36,13 +38,16 @@ const Profile = () => {
           `/api/auth/update-profile-pic/${currentUser._id}`,
           {
             profilePicture: uploadedUrl,
+          },{
+
+            withCredentials: true,
           }
         );
         dispatch(imageUpdate(response.data?.profilePicture));
 
         toast.success("Profile image updated successfully");
       } catch (error) {
-        toast.error("Failed to update profile image");
+        toast.error("Failed to update profile image",error);
       }
     }
   };
@@ -82,6 +87,9 @@ const Profile = () => {
         {
           username: userName,
           email: userEmail,
+        },
+        {
+          withCredentials: true,
         }
       );
       console.log("response isss", response);
@@ -100,6 +108,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     dispatch(userLogout());
+    navigate("/sign-in")
     toast.success("User loggedOut successfully");
     persistor.purge(); //===================================================> clear persisted user state
   };
@@ -148,7 +157,7 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer"> Delete Account</span>
+
         <span onClick={handleLogout} className="text-red-700 cursor-pointer">
           {" "}
           Sign out

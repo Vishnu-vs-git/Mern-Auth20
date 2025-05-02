@@ -25,12 +25,13 @@ const AppContent = () => {
 
       <Routes>
         {/* User routes */}
+        <Route path="/" element={<SignIn />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<About />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         </Route>
 
         {/* Admin routes */}

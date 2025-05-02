@@ -57,8 +57,9 @@ const AdminDashboard = () => {
         });
         toast.success("User deleted successfully");
         fetchUsers();
-      } catch (err) {
+      } catch (error) {
         toast.error("Failed to delete user");
+        console.log(error)
       }
     }
   };
@@ -88,8 +89,9 @@ const AdminDashboard = () => {
           `User ${isBlocked ? "unblocked" : "blocked"} successfully`
         );
         fetchUsers();
-      } catch (err) {
+      } catch (error) {
         toast.error("Failed to update user status");
+        console.log(error)
       }
     }
   };

@@ -17,7 +17,7 @@ const Home = () => {
   if(currentUser==null){
       navigate("/sign-up")
   }else{
-    navigate("/")
+    navigate("/home")
   }
 
 
